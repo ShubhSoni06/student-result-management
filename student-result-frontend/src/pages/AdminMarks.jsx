@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Layout from "../components/Layout";
 import { getStudents } from "../services/students";
 import { getSubjects } from "../services/subjects";
 import { saveMarks } from "../services/marks";
@@ -7,65 +8,77 @@ function AdminMarks() {
   const students = getStudents();
   const subjects = getSubjects();
 
-  const [selectedStudent, setSelectedStudent] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [marks, setMarks] = useState({});
 
-  const handleMarkChange = (subjectId, value) => {
+  const handleChange = (subjectId, value) => {
     setMarks({ ...marks, [subjectId]: value });
   };
 
   const handleSave = () => {
-    if (!selectedStudent) {
+    if (!studentId) {
       alert("Select a student");
       return;
     }
 
-    const formattedMarks = subjects.map((sub) => ({
+    const data = subjects.map((sub) => ({
       subjectId: sub.id,
-      marks: Number(marks[sub.id] || 0)
+      marks: Number(marks[sub.id] || 0),
     }));
 
-    saveMarks(selectedStudent, formattedMarks);
+    saveMarks(studentId, data);
     alert("Marks saved successfully");
   };
 
   return (
-    <div>
-      <h2>Enter Marks</h2>
+    <Layout>
+      <h2 className="text-2xl font-bold mb-6">
+        Enter Marks
+      </h2>
 
-      <select onChange={(e) => setSelectedStudent(e.target.value)}>
-        <option value="">Select Student</option>
-        {students.map((stu) => (
-          <option key={stu.id} value={stu.id}>
-            {stu.name}
-          </option>
-        ))}
-      </select>
+      <div className="bg-white p-6 rounded-xl shadow max-w-2xl">
+        <select
+          className="border rounded px-3 py-2 mb-4 w-full"
+          onChange={(e) => setStudentId(e.target.value)}
+        >
+          <option value="">Select Student</option>
+          {students.map((stu) => (
+            <option key={stu.id} value={stu.id}>
+              {stu.name}
+            </option>
+          ))}
+        </select>
 
-      {selectedStudent && (
-        <div>
-          <h3>Subjects</h3>
-
-          {subjects.map((sub) => (
-            <div key={sub.id}>
-              <label>
-                {sub.name}:{" "}
+        {studentId && (
+          <div className="space-y-3">
+            {subjects.map((sub) => (
+              <div
+                key={sub.id}
+                className="flex justify-between items-center"
+              >
+                <span>{sub.name}</span>
                 <input
                   type="number"
                   min="0"
                   max="100"
+                  className="border rounded px-3 py-1 w-24 text-center"
                   onChange={(e) =>
-                    handleMarkChange(sub.id, e.target.value)
+                    handleChange(sub.id, e.target.value)
                   }
                 />
-              </label>
-            </div>
-          ))}
+              </div>
+            ))}
 
-          <button onClick={handleSave}>Save Marks</button>
-        </div>
-      )}
-    </div>
+            <button
+              onClick={handleSave}
+              className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            >
+              Save Marks
+            </button>
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 }
 
