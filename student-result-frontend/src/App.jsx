@@ -5,6 +5,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Result from "./pages/Result";
 import { useAuth } from "./context/AuthContext";
 import AdminSubjects from "./pages/AdminSubjects";
+import AdminMarks from "./pages/AdminMarks";
 
 function App() {
   const { user } = useAuth();
@@ -38,6 +39,13 @@ function App() {
         path="/admin/subjects"
         element={
           user?.role === "ADMIN" ? <AdminSubjects /> : <Navigate to="/" />
+        }
+      />
+
+      <Route
+        path="/admin/marks"
+        element={
+          user?.role === "ADMIN" ? <AdminMarks /> : <Navigate to="/" />
         }
       />
 
