@@ -4,6 +4,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Result from "./pages/Result";
 import { useAuth } from "./context/AuthContext";
+import AdminSubjects from "./pages/AdminSubjects";
 
 function App() {
   const { user } = useAuth();
@@ -32,6 +33,14 @@ function App() {
           user?.role === "ADMIN" ? <AdminDashboard /> : <Navigate to="/" />
         }
       />
+
+      <Route
+        path="/admin/subjects"
+        element={
+          user?.role === "ADMIN" ? <AdminSubjects /> : <Navigate to="/" />
+        }
+      />
+
     </Routes>
   );
 }
