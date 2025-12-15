@@ -1,14 +1,22 @@
 import Layout from "../components/Layout";
-import { getMyResults } from "../services/results";
 import { getMarksByStudent } from "../services/marks";
 import { getSubjects } from "../services/subjects";
+import { getStudents } from "../services/students";
+import { useAuth } from "../context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 function Result() {
-  const student = getMyResults(); // mock logged-in student
+  const { user } = useAuth();
+
   const subjects = getSubjects();
-  const marksList = getMarksByStudent(1); // mock studentId
+  const students = getStudents();
+
+  const student = students.find(
+    (s) => s.id === user.studentId
+  );
+
+  const marksList = getMarksByStudent(user.studentId);
 
   const getGradePoint = (marks) => {
     if (marks >= 90) return 10;
@@ -72,7 +80,7 @@ function Result() {
       head: [["Subject", "Marks", "Credits", "Grade Point"]],
       body: tableData,
       styles: { halign: "center" },
-      headStyles: { fillColor: [79, 70, 229] }, // Indigo
+      headStyles: { fillColor: [79, 70, 229] },
     });
 
     const finalY = doc.lastAutoTable.finalY + 10;
@@ -117,11 +125,20 @@ function Result() {
     URL.revokeObjectURL(url);
   };
 
+  if (!student) {
+    return (
+      <Layout>
+        <p className="text-center text-red-500">
+          Student record not found.
+        </p>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div className="max-w-5xl mx-auto bg-white p-8 rounded-2xl shadow">
 
-        {/* Header */}
         <h2 className="text-2xl font-semibold text-center mb-6">
           Semester Result
         </h2>
@@ -141,9 +158,7 @@ function Result() {
                 <th className="border px-4 py-2 text-left">Subject</th>
                 <th className="border px-4 py-2 text-center">Marks</th>
                 <th className="border px-4 py-2 text-center">Credits</th>
-                <th className="border px-4 py-2 text-center">
-                  Grade Point
-                </th>
+                <th className="border px-4 py-2 text-center">Grade Point</th>
               </tr>
             </thead>
             <tbody>
