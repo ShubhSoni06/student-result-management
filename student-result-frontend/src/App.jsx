@@ -6,6 +6,9 @@ import Result from "./pages/Result";
 import { useAuth } from "./context/AuthContext";
 import AdminSubjects from "./pages/AdminSubjects";
 import AdminMarks from "./pages/AdminMarks";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 function App() {
   const { user } = useAuth();
@@ -48,6 +51,11 @@ function App() {
           user?.role === "ADMIN" ? <AdminMarks /> : <Navigate to="/" />
         }
       />
+
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/login" element={<Login />} />
 
     </Routes>
   );
