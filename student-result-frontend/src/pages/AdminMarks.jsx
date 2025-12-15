@@ -11,11 +11,12 @@ function AdminMarks() {
 
   const students = getStudents().filter(
     (s) => !s.isDemo
-  ); // prevent demo student mutation
+  ); // protect demo student
 
   const subjects = getSubjects();
 
   const [studentId, setStudentId] = useState("");
+  const [semester, setSemester] = useState("");
   const [marks, setMarks] = useState({});
 
   const handleChange = (subjectId, value) => {
@@ -26,8 +27,8 @@ function AdminMarks() {
   const handleSave = () => {
     if (isDemo) return;
 
-    if (!studentId) {
-      alert("Select a student");
+    if (!studentId || !semester) {
+      alert("Select student and semester");
       return;
     }
 
@@ -36,8 +37,8 @@ function AdminMarks() {
       marks: Number(marks[sub.id] || 0),
     }));
 
-    saveMarks(studentId, data);
-    alert("Marks saved successfully");
+    saveMarks(Number(studentId), Number(semester), data);
+    alert(`Marks saved for Semester ${semester}`);
   };
 
   return (
@@ -53,10 +54,15 @@ function AdminMarks() {
         </div>
       )}
 
-      <div className="bg-white p-6 rounded-xl shadow max-w-2xl">
+      <div className="bg-white p-6 rounded-xl shadow max-w-2xl space-y-4">
+
+        {/* Student Selector */}
         <select
-          className="border rounded px-3 py-2 mb-4 w-full disabled:bg-slate-100"
-          onChange={(e) => setStudentId(e.target.value)}
+          className="border rounded px-3 py-2 w-full disabled:bg-slate-100"
+          onChange={(e) => {
+            setStudentId(e.target.value);
+            setMarks({});
+          }}
           disabled={isDemo}
         >
           <option value="">Select Student</option>
@@ -67,7 +73,25 @@ function AdminMarks() {
           ))}
         </select>
 
-        {studentId && (
+        {/* Semester Selector */}
+        <select
+          className="border rounded px-3 py-2 w-full disabled:bg-slate-100"
+          onChange={(e) => {
+            setSemester(e.target.value);
+            setMarks({});
+          }}
+          disabled={isDemo || !studentId}
+        >
+          <option value="">Select Semester</option>
+          {[1, 2, 3, 4, 5, 6].map((sem) => (
+            <option key={sem} value={sem}>
+              Semester {sem}
+            </option>
+          ))}
+        </select>
+
+        {/* Marks Inputs */}
+        {studentId && semester && (
           <div className="space-y-3">
             {subjects.map((sub) => (
               <div

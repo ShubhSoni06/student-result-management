@@ -1,22 +1,41 @@
 const semesterResults = [
-  // Demo student
+  /* =========================
+     DEMO STUDENT (Diploma)
+     ========================= */
   {
     studentId: -1,
     semester: 1,
-    spi: 6.8,
+    spi: 6.2,
   },
   {
     studentId: -1,
     semester: 2,
-    spi: 7.2,
+    spi: 6.8,
   },
   {
     studentId: -1,
     semester: 3,
-    spi: 7.9,
+    spi: 7.3,
+  },
+  {
+    studentId: -1,
+    semester: 4,
+    spi: 7.0,
+  },
+  {
+    studentId: -1,
+    semester: 5,
+    spi: 7.6,
+  },
+  {
+    studentId: -1,
+    semester: 6,
+    spi: 8.1,
   },
 
-  // Real student example
+  /* =========================
+     REAL STUDENT (Example)
+     ========================= */
   {
     studentId: 1,
     semester: 1,
