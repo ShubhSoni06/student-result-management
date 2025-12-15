@@ -45,6 +45,33 @@ function Result() {
       ? (weightedPoints / totalCredits).toFixed(2)
       : "0.00";
 
+  const downloadCSV = () => {
+    const headers = ["Subject", "Marks", "Credits", "Grade Point"];
+
+    const rows = finalData.map((item) => [
+      item.name,
+      item.marks,
+      item.credits,
+      item.gradePoint,
+    ]);
+
+    let csvContent =
+      headers.join(",") +
+      "\n" +
+      rows.map((row) => row.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "result.csv";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+
   return (
     <Layout>
       <div className="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow">
@@ -104,6 +131,22 @@ function Result() {
               <span className="text-blue-700">
                 {spi}
               </span>
+
+              <div className="mt-6 flex justify-between items-center">
+                <button
+                  onClick={downloadCSV}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+                >
+                  Download CSV
+                </button>
+
+                <div className="bg-blue-50 border border-blue-200 px-6 py-4 rounded-lg">
+                  <p className="text-lg font-semibold">
+                    SPI: <span className="text-blue-700">{spi}</span>
+                  </p>
+                </div>
+              </div>
+
             </p>
           </div>
         </div>
