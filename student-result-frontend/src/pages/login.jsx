@@ -16,18 +16,40 @@ function Login() {
       return;
     }
 
-    // Admin login (demo)
+    /* =========================
+       DEMO ADMIN LOGIN
+       ========================= */
+    if (
+      email === "demo-admin@mail.com" &&
+      password === "demo123"
+    ) {
+      login({
+        role: "ADMIN",
+        email,
+        isDemo: true,
+        token: "demo-token",
+      });
+      navigate("/admin");
+      return;
+    }
+
+    /* =========================
+       REAL ADMIN (DEV)
+       ========================= */
     if (email === "admin@mail.com") {
       login({
         role: "ADMIN",
         email,
+        isDemo: false,
         token: "fake-token",
       });
       navigate("/admin");
       return;
     }
 
-    // Student login (email-based mapping)
+    /* =========================
+       DEMO / REAL STUDENT LOGIN
+       ========================= */
     const student = getStudentByEmail(email);
 
     if (!student) {
@@ -35,11 +57,18 @@ function Login() {
       return;
     }
 
+    // Demo student password check
+    if (student.isDemo && password !== "demo123") {
+      alert("Invalid demo password");
+      return;
+    }
+
     login({
       role: "STUDENT",
       studentId: student.id,
       email: student.email,
-      token: "fake-token",
+      isDemo: student.isDemo,
+      token: student.isDemo ? "demo-token" : "fake-token",
     });
 
     navigate("/student");
@@ -78,10 +107,14 @@ function Login() {
             </button>
           </div>
 
-          <p className="text-sm text-gray-500 text-center mt-4">
-            Demo users:{" "}
-            <b>admin@mail.com</b> or any student email added by admin
-          </p>
+          <div className="text-sm text-gray-500 text-center mt-4 space-y-1">
+            <p>
+              <b>Demo Admin:</b> demo-admin@mail.com / demo123
+            </p>
+            <p>
+              <b>Demo Student:</b> demo-student@mail.com / demo123
+            </p>
+          </div>
         </div>
       </div>
     </PublicLayout>

@@ -14,6 +14,8 @@ import AdminSubjects from "./pages/AdminSubjects";
 import AdminMarks from "./pages/AdminMarks";
 
 import AdminStudents from "./pages/AdminStudents";
+import StudentProfile from "./pages/StudentProfile";
+
 
 function App() {
   const { user } = useAuth();
@@ -48,6 +50,14 @@ function App() {
           )
         }
       />
+
+      <Route
+        path="/student/profile"
+        element={
+          user?.role === "STUDENT" ? <StudentProfile /> : <Navigate to="/" />
+        }
+      />
+
 
       {/* ===== Admin Routes ===== */}
       <Route

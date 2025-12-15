@@ -1,4 +1,5 @@
 let students = [
+  // 🔹 Real student (example)
   {
     id: 1,
     name: "Shubh Soni",
@@ -7,6 +8,19 @@ let students = [
     course: "Diploma",
     branch: "Computer Engineering",
     semester: 3,
+    isDemo: false,
+  },
+
+  // 🔹 Demo student (public-safe)
+  {
+    id: -1,
+    name: "Demo Student",
+    email: "demo-student@mail.com",
+    enrollment: "DEMO-000",
+    course: "Diploma",
+    branch: "Computer Engineering",
+    semester: 3,
+    isDemo: true,
   },
 ];
 
@@ -23,6 +37,7 @@ export const getStudentByEmail = (email) => {
 export const addStudent = (student) => {
   students.push({
     id: Date.now(),
+    isDemo: false, // real students only
     ...student,
   });
 };
