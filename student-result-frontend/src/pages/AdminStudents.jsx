@@ -6,6 +6,7 @@ function AdminStudents() {
   const [students, setStudents] = useState(getStudents());
   const [form, setForm] = useState({
     name: "",
+    email: "",
     enrollment: "",
     course: "",
     branch: "",
@@ -19,6 +20,7 @@ function AdminStudents() {
   const handleAdd = () => {
     if (
       !form.name ||
+      !form.email ||
       !form.enrollment ||
       !form.course ||
       !form.branch ||
@@ -29,13 +31,18 @@ function AdminStudents() {
     }
 
     addStudent({
-      ...form,
+      name: form.name,
+      email: form.email,
+      enrollment: form.enrollment,
+      course: form.course,
+      branch: form.branch,
       semester: Number(form.semester),
     });
 
     setStudents(getStudents());
     setForm({
       name: "",
+      email: "",
       enrollment: "",
       course: "",
       branch: "",
@@ -52,11 +59,21 @@ function AdminStudents() {
       {/* Add Student Form */}
       <div className="bg-white p-6 rounded-xl shadow mb-6 max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
           <input
             name="name"
             placeholder="Student Name"
             className="border rounded px-3 py-2"
             value={form.name}
+            onChange={handleChange}
+          />
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Student Email (Login ID)"
+            className="border rounded px-3 py-2"
+            value={form.email}
             onChange={handleChange}
           />
 
@@ -111,6 +128,7 @@ function AdminStudents() {
           <thead className="bg-slate-100">
             <tr>
               <th className="border px-4 py-2 text-left">Name</th>
+              <th className="border px-4 py-2">Email</th>
               <th className="border px-4 py-2">Enrollment</th>
               <th className="border px-4 py-2">Course</th>
               <th className="border px-4 py-2">Branch</th>
@@ -121,6 +139,7 @@ function AdminStudents() {
             {students.map((stu) => (
               <tr key={stu.id} className="hover:bg-slate-50">
                 <td className="border px-4 py-2">{stu.name}</td>
+                <td className="border px-4 py-2 text-center">{stu.email}</td>
                 <td className="border px-4 py-2 text-center">{stu.enrollment}</td>
                 <td className="border px-4 py-2 text-center">{stu.course}</td>
                 <td className="border px-4 py-2 text-center">{stu.branch}</td>
