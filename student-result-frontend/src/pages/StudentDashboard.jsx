@@ -9,7 +9,21 @@ function StudentDashboard() {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Result Card */}
+
+        {/* View Profile */}
+        <Link
+          to="/student/profile"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold mb-2">
+            My Profile
+          </h3>
+          <p className="text-gray-600">
+            View your personal and academic details.
+          </p>
+        </Link>
+
+        {/* View Results */}
         <Link
           to="/student/result"
           className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
@@ -22,24 +36,16 @@ function StudentDashboard() {
           </p>
         </Link>
 
-        {/* Placeholder for future features */}
-        <div className="bg-white p-6 rounded-xl shadow opacity-60">
+        {/* Performance Trend (Next Phase) */}
+        <div className="bg-white p-6 rounded-xl shadow opacity-70">
           <h3 className="text-xl font-semibold mb-2">
-            Profile (Coming Soon)
+            Performance Trend
           </h3>
           <p className="text-gray-600">
-            View and manage your student profile.
+            Analyze your semester-wise performance (coming next).
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow opacity-60">
-          <h3 className="text-xl font-semibold mb-2">
-            Download Result (Coming Soon)
-          </h3>
-          <p className="text-gray-600">
-            Download your official marksheet in PDF format.
-          </p>
-        </div>
       </div>
     </Layout>
   );
