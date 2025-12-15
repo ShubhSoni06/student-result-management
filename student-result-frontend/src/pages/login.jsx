@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getStudentByEmail } from "../services/students";
 import PublicLayout from "../components/PublicLayout";
 
 function Login() {
@@ -15,13 +16,33 @@ function Login() {
       return;
     }
 
-    const user =
-      email === "admin@mail.com"
-        ? { role: "ADMIN", token: "fake-token" }
-        : { role: "STUDENT", token: "fake-token" };
+    // Admin login (demo)
+    if (email === "admin@mail.com") {
+      login({
+        role: "ADMIN",
+        email,
+        token: "fake-token",
+      });
+      navigate("/admin");
+      return;
+    }
 
-    login(user);
-    navigate(user.role === "ADMIN" ? "/admin" : "/student");
+    // Student login (email-based mapping)
+    const student = getStudentByEmail(email);
+
+    if (!student) {
+      alert("No student found with this email");
+      return;
+    }
+
+    login({
+      role: "STUDENT",
+      studentId: student.id,
+      email: student.email,
+      token: "fake-token",
+    });
+
+    navigate("/student");
   };
 
   return (
@@ -36,7 +57,7 @@ function Login() {
             <input
               type="email"
               placeholder="Email"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -44,21 +65,22 @@ function Login() {
             <input
               type="password"
               placeholder="Password"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
             <button
               onClick={handleLogin}
-              className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition"
+              className="w-full bg-indigo-600 text-white py-2 rounded font-semibold hover:bg-indigo-700 transition"
             >
               Login
             </button>
           </div>
 
           <p className="text-sm text-gray-500 text-center mt-4">
-            Use <b>admin@mail.com</b> or <b>student@mail.com</b>
+            Demo users:{" "}
+            <b>admin@mail.com</b> or any student email added by admin
           </p>
         </div>
       </div>
