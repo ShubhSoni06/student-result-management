@@ -7,15 +7,14 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 
 import StudentDashboard from "./pages/StudentDashboard";
+import StudentProfile from "./pages/StudentProfile";
+import StudentPerformance from "./pages/StudentPerformance";
 import Result from "./pages/Result";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminSubjects from "./pages/AdminSubjects";
 import AdminMarks from "./pages/AdminMarks";
-
 import AdminStudents from "./pages/AdminStudents";
-import StudentProfile from "./pages/StudentProfile";
-
 
 function App() {
   const { user } = useAuth();
@@ -41,6 +40,17 @@ function App() {
       />
 
       <Route
+        path="/student/profile"
+        element={
+          user?.role === "STUDENT" ? (
+            <StudentProfile />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+
+      <Route
         path="/student/result"
         element={
           user?.role === "STUDENT" ? (
@@ -52,12 +62,15 @@ function App() {
       />
 
       <Route
-        path="/student/profile"
+        path="/student/performance"
         element={
-          user?.role === "STUDENT" ? <StudentProfile /> : <Navigate to="/" />
+          user?.role === "STUDENT" ? (
+            <StudentPerformance />
+          ) : (
+            <Navigate to="/login" />
+          )
         }
       />
-
 
       {/* ===== Admin Routes ===== */}
       <Route
@@ -96,10 +109,13 @@ function App() {
       <Route
         path="/admin/students"
         element={
-          user?.role === "ADMIN" ? <AdminStudents /> : <Navigate to="/login" />
+          user?.role === "ADMIN" ? (
+            <AdminStudents />
+          ) : (
+            <Navigate to="/login" />
+          )
         }
       />
-
 
       {/* ===== Fallback ===== */}
       <Route path="*" element={<Navigate to="/" />} />
