@@ -9,6 +9,8 @@ function AdminDashboard() {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {/* Manage Subjects */}
         <Link
           to="/admin/subjects"
           className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
@@ -21,6 +23,7 @@ function AdminDashboard() {
           </p>
         </Link>
 
+        {/* Enter Marks */}
         <Link
           to="/admin/marks"
           className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
@@ -32,6 +35,20 @@ function AdminDashboard() {
             Assign marks to students and update results.
           </p>
         </Link>
+
+        {/* Manage Students */}
+        <Link
+          to="/admin/students"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold mb-2">
+            Manage Students
+          </h3>
+          <p className="text-gray-600">
+            Add and manage student profiles and academic details.
+          </p>
+        </Link>
+
       </div>
     </Layout>
   );

@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminSubjects from "./pages/AdminSubjects";
 import AdminMarks from "./pages/AdminMarks";
 
+import AdminStudents from "./pages/AdminStudents";
+
 function App() {
   const { user } = useAuth();
 
@@ -80,6 +82,14 @@ function App() {
           )
         }
       />
+
+      <Route
+        path="/admin/students"
+        element={
+          user?.role === "ADMIN" ? <AdminStudents /> : <Navigate to="/login" />
+        }
+      />
+
 
       {/* ===== Fallback ===== */}
       <Route path="*" element={<Navigate to="/" />} />

@@ -1,6 +1,21 @@
-export const students = [
-  { id: 1, name: "Shubh Soni", enrollment: "CE2021-045", semester: 5 },
-  { id: 2, name: "Rahul Patel", enrollment: "CE2021-046", semester: 5 }
+let students = [
+  {
+    id: 1,
+    name: "Shubh Soni",
+    enrollment: "DIP2023001",
+    course: "Diploma",
+    branch: "Computer Engineering",
+    semester: 3,
+  },
 ];
 
-export const getStudents = () => students;
+export const getStudents = () => {
+  return students;
+};
+
+export const addStudent = (student) => {
+  students.push({
+    id: Date.now(),
+    ...student,
+  });
+};
