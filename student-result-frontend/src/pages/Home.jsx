@@ -4,116 +4,138 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <PublicLayout>
-      <div className="space-y-20">
+      <div className="space-y-28">
 
         {/* HERO SECTION */}
-        <section className="text-center py-16">
-          <h1 className="text-4xl font-bold mb-4">
-            Student Result Management System
+        <section className="text-center py-24 relative">
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 to-transparent" />
+
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6 text-slate-900">
+            Student Result{" "}
+            <span className="text-indigo-600">Management</span> System
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-6">
+
+          <p className="text-slate-600 max-w-2xl mx-auto mb-8 text-lg">
             A modern, role-based academic portal to manage students, subjects,
-            marks, and performance metrics like SPI and GPA.
+            marks, and performance metrics like{" "}
+            <span className="font-medium text-slate-800">SPI</span> and{" "}
+            <span className="font-medium text-slate-800">GPA</span>.
           </p>
 
           <div className="flex justify-center gap-4">
             <Link
               to="/login"
-              className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition"
+              className="bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 transition transform hover:-translate-y-0.5 shadow-md"
             >
-              Get Started
+              Login as Demo User
             </Link>
+
             <Link
               to="/about"
-              className="border border-blue-600 text-blue-600 px-6 py-3 rounded hover:bg-blue-50 transition"
+              className="border border-indigo-600 text-indigo-600 px-8 py-3 rounded-xl hover:bg-indigo-50 transition"
             >
               Learn More
             </Link>
+          </div>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 text-sm text-slate-500">
+            Demo access:{" "}
+            <span className="font-medium">student@mail.com</span> /{" "}
+            <span className="font-medium">admin@mail.com</span>
+            <span className="ml-1">(any password)</span>
           </div>
         </section>
 
         {/* FEATURES SECTION */}
         <section className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-10">
+          <h2 className="text-3xl font-semibold tracking-tight text-center mb-14">
             Key Features
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow">
-              <h3 className="text-lg font-semibold mb-2">
-                Role-Based Access
-              </h3>
-              <p className="text-gray-600">
-                Separate dashboards for Admin and Students with secure access control.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow">
-              <h3 className="text-lg font-semibold mb-2">
-                Result & SPI Calculation
-              </h3>
-              <p className="text-gray-600">
-                Automatic SPI calculation using credit-weighted grade points.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow">
-              <h3 className="text-lg font-semibold mb-2">
-                Admin Control
-              </h3>
-              <p className="text-gray-600">
-                Admins can manage subjects, enter marks, and update results dynamically.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Role-Based Access",
+                desc: "Separate dashboards for Admin and Students with secure access control.",
+              },
+              {
+                title: "Result & SPI Calculation",
+                desc: "Automatic SPI calculation using credit-weighted grade points.",
+              },
+              {
+                title: "Admin Control Panel",
+                desc: "Admins can manage subjects, enter marks, and update results dynamically.",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-white/80 backdrop-blur p-8 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition group"
+              >
+                <h3 className="text-lg font-semibold mb-2 group-hover:text-indigo-600 transition">
+                  {item.title}
+                </h3>
+                <p className="text-slate-600">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* HOW IT WORKS */}
-        <section className="bg-gray-100 py-16">
+        <section className="bg-slate-100/70 py-24">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl font-bold text-center mb-10">
+            <h2 className="text-3xl font-semibold tracking-tight text-center mb-14">
               How It Works
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div>
-                <h3 className="font-semibold mb-2">Admin</h3>
-                <p className="text-gray-600">
-                  Adds subjects and enters marks for students.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">System</h3>
-                <p className="text-gray-600">
-                  Calculates grades and SPI automatically.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Student</h3>
-                <p className="text-gray-600">
-                  Views results and performance instantly.
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+              {[
+                { title: "Admin", desc: "Adds subjects and enters marks for students." },
+                { title: "System", desc: "Processes data and calculates grades & SPI." },
+                { title: "Student", desc: "Views results and performance instantly." },
+              ].map((step, index) => (
+                <div key={index}>
+                  <div className="mx-auto mb-4 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-600 font-bold">
+                    {index + 1}
+                  </div>
+                  <h3 className="font-semibold mb-2 text-slate-800">
+                    {step.title}
+                  </h3>
+                  <p className="text-slate-600">{step.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* TECH STACK + CTA */}
-        <section className="text-center py-16">
-          <h2 className="text-2xl font-bold mb-4">
-            Built With Modern Technologies
-          </h2>
-          <p className="text-gray-600 mb-6">
-            React • Tailwind CSS • REST Architecture • Relational Database Design
+        {/* FOOTER / DEVELOPER INFO */}
+        <footer className="border-t border-slate-200 py-10 text-center text-sm text-slate-500">
+          <p className="font-medium text-slate-700">
+            Developed by Shubh Soni
+          </p>
+          <p className="mt-1">
+            Computer Engineering Student • Full-Stack Developer
           </p>
 
-          <Link
-            to="/login"
-            className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition"
-          >
-            Try the Demo
-          </Link>
-        </section>
+          <div className="mt-3 flex justify-center gap-4">
+            <a
+              href="#"
+              className="hover:text-indigo-600 transition"
+            >
+              GitHub
+            </a>
+            <a
+              href="#"
+              className="hover:text-indigo-600 transition"
+            >
+              LinkedIn
+            </a>
+          </div>
+
+          <p className="mt-4 text-xs">
+            © {new Date().getFullYear()} Student Result Management System
+          </p>
+        </footer>
 
       </div>
     </PublicLayout>
