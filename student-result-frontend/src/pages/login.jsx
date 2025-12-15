@@ -67,6 +67,7 @@ function Login() {
       role: "STUDENT",
       studentId: student.id,
       email: student.email,
+      currentSemester: student.semester,
       isDemo: student.isDemo,
       token: student.isDemo ? "demo-token" : "fake-token",
     });
