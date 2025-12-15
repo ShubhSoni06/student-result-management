@@ -10,7 +10,7 @@ function StudentDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        {/* View Profile */}
+        {/* My Profile */}
         <Link
           to="/student/profile"
           className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
@@ -36,15 +36,18 @@ function StudentDashboard() {
           </p>
         </Link>
 
-        {/* Performance Trend (Next Phase) */}
-        <div className="bg-white p-6 rounded-xl shadow opacity-70">
+        {/* Performance Trend */}
+        <Link
+          to="/student/performance"
+          className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+        >
           <h3 className="text-xl font-semibold mb-2">
             Performance Trend
           </h3>
           <p className="text-gray-600">
-            Analyze your semester-wise performance (coming next).
+            Analyze your semester-wise performance over time.
           </p>
-        </div>
+        </Link>
 
       </div>
     </Layout>
