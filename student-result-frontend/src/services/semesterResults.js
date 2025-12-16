@@ -58,3 +58,20 @@ export const getSemesterResultsByStudent = (studentId) => {
     .filter((r) => r.studentId === studentId)
     .sort((a, b) => a.semester - b.semester);
 };
+
+export const getCGPAByStudent = (studentId, currentSemester) => {
+  const results = semesterResults.filter(
+    (r) =>
+      r.studentId === studentId &&
+      r.semester <= currentSemester
+  );
+
+  if (results.length === 0) return "0.00";
+
+  const totalSPI = results.reduce(
+    (sum, r) => sum + r.spi,
+    0
+  );
+
+  return (totalSPI / results.length).toFixed(2);
+};
