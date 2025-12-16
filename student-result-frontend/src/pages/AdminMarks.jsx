@@ -3,6 +3,10 @@ import Layout from "../components/Layout";
 import { getStudents } from "../services/students";
 import { getSubjects } from "../services/subjects";
 import { saveMarks } from "../services/marks";
+import {
+  isResultPublished,
+  publishResult,
+} from "../services/resultStatus"; // ✅ NEW
 import { useAuth } from "../context/AuthContext";
 
 function AdminMarks() {
@@ -19,13 +23,18 @@ function AdminMarks() {
   const [semester, setSemester] = useState("");
   const [marks, setMarks] = useState({});
 
+  const published =
+    studentId && semester
+      ? isResultPublished(Number(studentId), Number(semester))
+      : false;
+
   const handleChange = (subjectId, value) => {
-    if (isDemo) return;
+    if (isDemo || published) return;
     setMarks({ ...marks, [subjectId]: value });
   };
 
   const handleSave = () => {
-    if (isDemo) return;
+    if (isDemo || published) return;
 
     if (!studentId || !semester) {
       alert("Select student and semester");
@@ -41,6 +50,19 @@ function AdminMarks() {
     alert(`Marks saved for Semester ${semester}`);
   };
 
+  const handlePublish = () => {
+    if (!studentId || !semester) return;
+
+    const confirmPublish = window.confirm(
+      `Publish results for Semester ${semester}?\nThis action cannot be undone.`
+    );
+
+    if (!confirmPublish) return;
+
+    publishResult(Number(studentId), Number(semester));
+    alert(`Results published for Semester ${semester}`);
+  };
+
   return (
     <Layout>
       <h2 className="text-2xl font-bold mb-4">
@@ -54,6 +76,13 @@ function AdminMarks() {
         </div>
       )}
 
+      {/* Published Banner */}
+      {published && (
+        <div className="mb-6 bg-green-50 border border-green-300 text-green-800 px-4 py-3 rounded-lg">
+          Results for this semester are published and locked.
+        </div>
+      )}
+
       <div className="bg-white p-6 rounded-xl shadow max-w-2xl space-y-4">
 
         {/* Student Selector */}
@@ -61,6 +90,7 @@ function AdminMarks() {
           className="border rounded px-3 py-2 w-full disabled:bg-slate-100"
           onChange={(e) => {
             setStudentId(e.target.value);
+            setSemester("");
             setMarks({});
           }}
           disabled={isDemo}
@@ -107,22 +137,33 @@ function AdminMarks() {
                   onChange={(e) =>
                     handleChange(sub.id, e.target.value)
                   }
-                  disabled={isDemo}
+                  disabled={isDemo || published}
                 />
               </div>
             ))}
 
-            <button
-              onClick={handleSave}
-              disabled={isDemo}
-              className={`mt-4 px-4 py-2 rounded transition text-white ${
-                isDemo
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700"
-              }`}
-            >
-              Save Marks
-            </button>
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={handleSave}
+                disabled={isDemo || published}
+                className={`px-4 py-2 rounded transition text-white ${
+                  isDemo || published
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
+              >
+                Save Marks
+              </button>
+
+              {!published && (
+                <button
+                  onClick={handlePublish}
+                  className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                >
+                  Publish Result
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
