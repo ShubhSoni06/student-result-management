@@ -4,7 +4,8 @@ import { getMarksByStudentAndSemester } from "../services/marks";
 import { getSubjects } from "../services/subjects";
 import { getStudents } from "../services/students";
 import { useAuth } from "../context/AuthContext";
-import { getCGPAByStudent } from "../services/semesterResults"; // ✅ NEW
+import { getCGPAByStudent } from "../services/semesterResults";
+import { isResultPublished } from "../services/resultStatus"; // ✅ NEW
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
@@ -21,10 +22,14 @@ function Result() {
     student?.semester || 1
   );
 
-  const marksList = getMarksByStudentAndSemester(
+  const published = isResultPublished(
     user.studentId,
     semester
   );
+
+  const marksList = published
+    ? getMarksByStudentAndSemester(user.studentId, semester)
+    : [];
 
   const getGradePoint = (marks) => {
     if (marks >= 90) return 10;
@@ -58,17 +63,18 @@ function Result() {
   });
 
   const spi =
-    totalCredits > 0
+    published && totalCredits > 0
       ? (weightedPoints / totalCredits).toFixed(2)
       : "0.00";
 
-  // ✅ CGPA calculation
   const cgpa = getCGPAByStudent(
     student.id,
     student.semester
   );
 
   const downloadPDF = () => {
+    if (!published) return;
+
     const doc = new jsPDF();
 
     doc.setFontSize(18);
@@ -95,11 +101,13 @@ function Result() {
     });
 
     doc.text(`SPI: ${spi}`, 14, doc.lastAutoTable.finalY + 10);
-    doc.text(`CGPA: ${cgpa}`, 14, doc.lastAutoTable.finalY + 18); // ✅ NEW
+    doc.text(`CGPA: ${cgpa}`, 14, doc.lastAutoTable.finalY + 18);
     doc.save(`result-semester-${semester}.pdf`);
   };
 
   const downloadCSV = () => {
+    if (!published) return;
+
     const headers = ["Subject", "Marks", "Credits", "Grade Point"];
     const rows = finalData.map((item) => [
       item.name,
@@ -163,59 +171,76 @@ function Result() {
           </select>
         </div>
 
-        {/* Result Table */}
-        <div className="overflow-x-auto mb-6">
-          <table className="w-full border border-slate-300">
-            <thead className="bg-slate-100">
-              <tr>
-                <th className="border px-4 py-2 text-left">Subject</th>
-                <th className="border px-4 py-2 text-center">Marks</th>
-                <th className="border px-4 py-2 text-center">Credits</th>
-                <th className="border px-4 py-2 text-center">Grade Point</th>
-              </tr>
-            </thead>
-            <tbody>
-              {finalData.map((item) => (
-                <tr key={item.id}>
-                  <td className="border px-4 py-2">{item.name}</td>
-                  <td className="border px-4 py-2 text-center">{item.marks}</td>
-                  <td className="border px-4 py-2 text-center">{item.credits}</td>
-                  <td className="border px-4 py-2 text-center">{item.gradePoint}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Actions + SPI + CGPA */}
-        <div className="flex justify-between items-center">
-          <div className="flex gap-3">
-            <button
-              onClick={downloadPDF}
-              className="bg-indigo-600 text-white px-4 py-2 rounded"
-            >
-              Download PDF
-            </button>
-
-            <button
-              onClick={downloadCSV}
-              className="bg-emerald-600 text-white px-4 py-2 rounded"
-            >
-              Download CSV
-            </button>
-          </div>
-
-          <div className="bg-indigo-50 border border-indigo-200 px-6 py-3 rounded-lg text-right">
-            <p>
-              <strong>SPI:</strong>{" "}
-              <span className="text-indigo-700">{spi}</span>
+        {/* 🔒 Unpublished State */}
+        {!published && (
+          <div className="text-center py-12 text-slate-600">
+            <p className="text-lg font-medium">
+              Results for Semester {semester} have not been published yet.
             </p>
-            <p className="mt-1">
-              <strong>CGPA:</strong>{" "}
-              <span className="text-indigo-700">{cgpa}</span>
+            <p className="text-sm mt-2">
+              Please check back later.
             </p>
           </div>
-        </div>
+        )}
+
+        {/* ✅ Published Results */}
+        {published && (
+          <>
+            {/* Result Table */}
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full border border-slate-300">
+                <thead className="bg-slate-100">
+                  <tr>
+                    <th className="border px-4 py-2 text-left">Subject</th>
+                    <th className="border px-4 py-2 text-center">Marks</th>
+                    <th className="border px-4 py-2 text-center">Credits</th>
+                    <th className="border px-4 py-2 text-center">Grade Point</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {finalData.map((item) => (
+                    <tr key={item.id}>
+                      <td className="border px-4 py-2">{item.name}</td>
+                      <td className="border px-4 py-2 text-center">{item.marks}</td>
+                      <td className="border px-4 py-2 text-center">{item.credits}</td>
+                      <td className="border px-4 py-2 text-center">{item.gradePoint}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Actions + SPI + CGPA */}
+            <div className="flex justify-between items-center">
+              <div className="flex gap-3">
+                <button
+                  onClick={downloadPDF}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded"
+                >
+                  Download PDF
+                </button>
+
+                <button
+                  onClick={downloadCSV}
+                  className="bg-emerald-600 text-white px-4 py-2 rounded"
+                >
+                  Download CSV
+                </button>
+              </div>
+
+              <div className="bg-indigo-50 border border-indigo-200 px-6 py-3 rounded-lg text-right">
+                <p>
+                  <strong>SPI:</strong>{" "}
+                  <span className="text-indigo-700">{spi}</span>
+                </p>
+                <p className="mt-1">
+                  <strong>CGPA:</strong>{" "}
+                  <span className="text-indigo-700">{cgpa}</span>
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </Layout>
   );
