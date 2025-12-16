@@ -1,6 +1,7 @@
 import Layout from "../components/Layout";
 import { useAuth } from "../context/AuthContext";
 import { getStudents } from "../services/students";
+import { getCGPAByStudent } from "../services/semesterResults";
 
 function StudentProfile() {
   const { user } = useAuth();
@@ -19,6 +20,12 @@ function StudentProfile() {
       </Layout>
     );
   }
+
+  // ✅ CGPA calculation
+  const cgpa = getCGPAByStudent(
+    student.id,
+    student.semester
+  );
 
   return (
     <Layout>
@@ -59,6 +66,19 @@ function StudentProfile() {
             <p className="font-medium">{student.semester}</p>
           </div>
 
+        </div>
+
+        {/* ✅ CGPA Section */}
+        <div className="mt-8 bg-indigo-50 border border-indigo-200 p-5 rounded-xl text-center">
+          <p className="text-lg font-semibold text-slate-700">
+            Cumulative GPA (CGPA)
+          </p>
+          <p className="text-3xl font-bold text-indigo-700 mt-2">
+            {cgpa}
+          </p>
+          <p className="text-sm text-slate-600 mt-1">
+            Calculated from completed semesters
+          </p>
         </div>
 
         <div className="mt-8 text-sm text-slate-500 text-center">

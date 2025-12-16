@@ -4,6 +4,7 @@ import { getMarksByStudentAndSemester } from "../services/marks";
 import { getSubjects } from "../services/subjects";
 import { getStudents } from "../services/students";
 import { useAuth } from "../context/AuthContext";
+import { getCGPAByStudent } from "../services/semesterResults"; // ✅ NEW
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
@@ -61,6 +62,12 @@ function Result() {
       ? (weightedPoints / totalCredits).toFixed(2)
       : "0.00";
 
+  // ✅ CGPA calculation
+  const cgpa = getCGPAByStudent(
+    student.id,
+    student.semester
+  );
+
   const downloadPDF = () => {
     const doc = new jsPDF();
 
@@ -88,6 +95,7 @@ function Result() {
     });
 
     doc.text(`SPI: ${spi}`, 14, doc.lastAutoTable.finalY + 10);
+    doc.text(`CGPA: ${cgpa}`, 14, doc.lastAutoTable.finalY + 18); // ✅ NEW
     doc.save(`result-semester-${semester}.pdf`);
   };
 
@@ -179,7 +187,7 @@ function Result() {
           </table>
         </div>
 
-        {/* Actions + SPI */}
+        {/* Actions + SPI + CGPA */}
         <div className="flex justify-between items-center">
           <div className="flex gap-3">
             <button
@@ -197,9 +205,15 @@ function Result() {
             </button>
           </div>
 
-          <div className="bg-indigo-50 border border-indigo-200 px-6 py-3 rounded-lg">
-            <strong>SPI:</strong>{" "}
-            <span className="text-indigo-700">{spi}</span>
+          <div className="bg-indigo-50 border border-indigo-200 px-6 py-3 rounded-lg text-right">
+            <p>
+              <strong>SPI:</strong>{" "}
+              <span className="text-indigo-700">{spi}</span>
+            </p>
+            <p className="mt-1">
+              <strong>CGPA:</strong>{" "}
+              <span className="text-indigo-700">{cgpa}</span>
+            </p>
           </div>
         </div>
       </div>
