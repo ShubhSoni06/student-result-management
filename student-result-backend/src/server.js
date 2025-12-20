@@ -15,3 +15,5 @@ sequelize
   .catch((err) => {
     console.error("Database sync failed:", err);
   });
+
+console.log("🚀 SERVER ACTUAL PORT:", PORT);
