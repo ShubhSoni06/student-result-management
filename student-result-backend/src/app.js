@@ -11,6 +11,12 @@ app.use(express.json());
 const authRoutes = require("./routes/auth.routes");
 app.use("/api/auth", authRoutes);
 
+const adminStudentsRoutes = require("./routes/adminStudents.routes");
+app.use("/api/admin/students", adminStudentsRoutes);
+
+const adminSubjectsRoutes = require("./routes/adminSubjects.routes");
+app.use("/api/admin/subjects", adminSubjectsRoutes);
+
 const testRoutes = require("./routes/test.routes");
 app.use("/api/test", testRoutes);
 
