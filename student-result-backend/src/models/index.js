@@ -4,6 +4,8 @@ const User = require("./User");
 const Student = require("./Student");
 const Subject = require("./Subject"); // ✅ ADD THIS
 
+const Mark = require("./Mark");
+
 // ===== Associations =====
 
 // One User → One Student
@@ -16,6 +18,12 @@ Student.belongsTo(User, {
   foreignKey: "userId",
 });
 
+Student.hasMany(Mark, { foreignKey: "studentId" });
+Mark.belongsTo(Student, { foreignKey: "studentId" });
+
+Subject.hasMany(Mark, { foreignKey: "subjectId" });
+Mark.belongsTo(Subject, { foreignKey: "subjectId" });
+
 // ========================
 
 module.exports = {
@@ -23,4 +31,5 @@ module.exports = {
   User,
   Student,
   Subject, // ✅ EXPORT THIS
+  Mark,
 };

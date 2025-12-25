@@ -20,6 +20,9 @@ app.use("/api/admin/subjects", adminSubjectsRoutes);
 const testRoutes = require("./routes/test.routes");
 app.use("/api/test", testRoutes);
 
+const adminMarksRoutes = require("./routes/adminMarks.routes");
+app.use("/api/admin/marks", adminMarksRoutes);
+
 /* ===== Test route ===== */
 app.get("/", (req, res) => {
   res.json({ status: "Backend running" });
