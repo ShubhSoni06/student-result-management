@@ -1,4 +1,4 @@
-const { Mark } = require("../models");
+const { Mark, ResultStatus } = require("../models");
 
 exports.saveMarks = async (req, res) => {
   try {
@@ -8,12 +8,23 @@ exports.saveMarks = async (req, res) => {
       return res.status(400).json({ message: "Invalid payload" });
     }
 
-    // Remove old marks for this student + semester
+    // 🔒 CHECK IF RESULT IS PUBLISHED (LOCK)
+    const published = await ResultStatus.findOne({
+      where: { studentId, semester },
+    });
+
+    if (published?.isPublished) {
+      return res.status(403).json({
+        message: "Result already published. Marks are locked.",
+      });
+    }
+
+    // 🧹 Remove old marks for this student + semester
     await Mark.destroy({
       where: { studentId, semester },
     });
 
-    // Insert new marks
+    // 📝 Insert new marks
     const records = marks.map((m) => ({
       studentId,
       subjectId: m.subjectId,
